@@ -16,22 +16,22 @@ pip3 install -r requirements.txt
  You need write a .json file as the input parameters of code. The format of parameter file should be :
 ```json
 {
-    "name":  "required, name of the output file" ,
-    "train": "required, path of the training file" ,
-    "sample": "required, path of the sampling file" ,
-    "normalize_cols": "required, list contains index of the normalize columns" ,
-    "gmm_cols": "required, list contains index of the gmm columns" ,
-    "one-hot_cols": "required, list contains index of the one-hot columns" ,
-    "ordinal_cols": "required, list contains index of the ordinal columns" ,
-    "model": "required, select a generative model, LGAN(LSTM) or VGAN(MLP)" ,
-    "n_epochs": "required, num of training epochs" ,
-    "steps_per_epoch": "required, steps per epoch" ,
-    "n_search": "required, training times" ,
-    "rand_search": "required, whether to search hyper-parameters randomly" , 
-    "param": "required if rand_search is 'yes', hyper-parameter of the NN" , 
-    "train_method": "required, training method" ,  
-    "label": "required if train_method is a conditional training, name of the label column" , 
-    "KL":"no" "optional, whether using KL loss in training, default 'yes'" 
+    "name": # required, name of the output file ,
+    "train": # required, path of the training file ,
+    "sample": # required, path of the sampling file ,
+    "normalize_cols": # required, list contains index of the normalize columns ,
+    "gmm_cols": # required, list contains index of the gmm columns ,
+    "one-hot_cols":# required, list contains index of the one-hot columns ,
+    "ordinal_cols":# required, list contains index of the ordinal columns ,
+    "model": # required, select a generative model, LGAN(LSTM) or VGAN(MLP) ,
+    "n_epochs": # required, num of training epochs
+    "steps_per_epoch": # required, steps per epoch ,
+    "n_search": # required, training times ,
+    "rand_search": # required, whether to search hyper-parameters randomly, 
+    "param": # required if rand_search is 'yes', hyper-parameter of the NN , 
+    "train_method": #required, training method,  
+    "label": # required if train_method is a conditional training, name of the label column , 
+    "KL":"no" # optional, whether using KL loss in training, default 'yes'
 },
 ```
 Folder "params" contains some examples, you can run the code using those parameter files directly, or write a self-defined parameter file to train a new dataset.
@@ -41,7 +41,7 @@ Run the code with the following command :
 ```sh
 python src/run.py [parameter file]
 ```
-Or run the following command for quickly start :
+You can run the following command for quickly start :
 ```sh
 ./run.sh
 ```

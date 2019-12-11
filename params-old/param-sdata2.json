@@ -2,7 +2,7 @@
 	{
 		"name": "sdata2-VGAN-1hot",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[0,1,2,3,4,5,6,7,8],
@@ -18,7 +18,7 @@
 	{
 		"name": "sdata2-VGAN-ordi",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[],
@@ -34,7 +34,7 @@
 	{
 		"name": "sdata2-LGAN-v-1hot",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[0,1,2,3,4,5,6,7,8],
@@ -50,7 +50,7 @@
 	{
 		"name": "sdata2-LGAN-v-ordi",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[],
@@ -66,7 +66,7 @@
 	{
 		"name": "sdata2-LGAN-c",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[0,1,2,3,4,5,6,7,8],
@@ -83,7 +83,7 @@
 	{
 		"name": "sdata2-LGAN-c-nofair",
 		"train": "dataset/sdata2_train.csv",
-		"sample": "dataset/sdata2_train.csv",
+		"sample": "dataset/sdata2_train.csv",	
 		"normalize_cols":[],
 		"gmm_cols":[],
 		"one-hot_cols":[0,1,2,3,4,5,6,7,8],

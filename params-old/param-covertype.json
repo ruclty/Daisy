@@ -1,7 +1,7 @@
 [
 	{
 		"name": "covertype-VGAN-1hot-norm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"gmm_cols":[],
 		"normalize_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -17,7 +17,7 @@
 	},
 	{
 		"name": "covertype-VGAN-ordi-norm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"gmm_cols":[],
 		"normalize_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -33,7 +33,7 @@
 	},
 	{
 		"name": "covertype-VGAN-1hot-gmm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -49,7 +49,7 @@
 	},
 	{
 		"name": "covertype-VGAN-ordi-gmm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -65,7 +65,7 @@
 	},
 	{
 		"name": "covertype-LGAN-v-1hot-gmm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -81,7 +81,7 @@
 	},
 	{
 		"name": "covertype-LGAN-v-ordi-gmm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -97,7 +97,7 @@
 	},
 	{
 		"name": "covertype-LGAN-v-ordi-norm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"gmm_cols":[],
 		"normalize_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -113,7 +113,7 @@
 	},
 	{
 		"name": "covertype-LGAN-v-1hot-norm",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"gmm_cols":[],
 		"normalize_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -129,7 +129,7 @@
 	},
 	{
 		"name": "covertype-LGAN-c",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],
@@ -146,7 +146,7 @@
 	},
 	{
 		"name": "covertype-LGAN-c-nofair",
-		"train": "dataset/covertype_train.csv",
+		"train": "dataset/covertype_train.csv",	
 		"sample": "dataset/covertype_train_simple.csv",
 		"normalize_cols":[],
 		"gmm_cols":[0,1,2,3,4,5,6,7,8,9],

@@ -102,6 +102,7 @@ class CategoricalField:
 	def convert(self, data):
 		assert isinstance(data, np.ndarray)
 		assert data.shape[1] == 1
+        
 		origin = data
 		data = data.reshape(1, -1)
 		data = list(map(lambda x: self.dict[x], data[0]))
