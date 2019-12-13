@@ -180,7 +180,8 @@
         "ng": 1000,
         "n_search": 5,
         "rand_search": "yes",
-        "train_method":"WTrain"
+        "train_method":"WTrain",
+        "KL":"no"
     }
 ]
 

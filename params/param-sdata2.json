@@ -58,7 +58,7 @@
 		"n_search": 5,
 		"rand_search": "yes",
 		"train_method":"VTrain"
-	}
+	},
 	{
 		"name": "sdata2-LGAN-c",
 		"train": "dataset/sdata2_train.csv",
@@ -120,6 +120,7 @@
         "ng": 5000,
         "n_search": 5,
         "rand_search": "yes",
-        "train_method":"WTrain"
+        "train_method":"WTrain",
+        "KL":"no"
     }
 ]
