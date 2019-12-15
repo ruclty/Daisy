@@ -128,7 +128,7 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		C_Train_nofair(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type,itertimes = 100, steps_per_epoch = config["steps_per_epoch"], GPU=GPU)		
 
 if __name__ == "__main__":
-	os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+	os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 	parser = argparse.ArgumentParser()
 	parser.add_argument('configs', help='a json config file')
 	args = parser.parse_args()

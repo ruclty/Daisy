@@ -53,11 +53,7 @@ class Dataset:
 		end = 0
 		for col, field in self.fields:
 			if field is not None:
-				try:
-					field.learn()
-				except:
-					print(col)
-					exit(0)
+				field.learn()
 			self.__dict__[col].convert_data()
 			self.col_dim.append(self.__dict__[col].dim)
 			self.dim += self.__dict__[col].dim
