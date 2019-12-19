@@ -112,7 +112,9 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		if "KL" in config.keys():
 			KL = True if config["KL"] == "yes" else False
         if "ratio" in config.keys():
-            ratio = config["ratio"] else 1
+            ratio = config["ratio"]
+        else:
+            ratio = 1
 		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL,ratio=ratio)
 	elif train_method == "CTrain":
 		print((c_dim, condition, x_dim))	
