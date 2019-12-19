@@ -19,10 +19,10 @@ pip3 install -r requirements.txt
     "name": " required, name of the output file " ,
     "train": " required, path of the training file " ,
     "sample": " required, path of the sampling file " ,
-    "normalize_cols": " required, list contains index of the normalize columns " ,
-    "gmm_cols": " required, list contains index of the gmm columns " ,
-    "one-hot_cols":" required, list contains index of the one-hot columns " ,
-    "ordinal_cols":" required, list contains index of the ordinal columns " ,
+    "normalize_cols": " required, a list contains index of the normalize columns " ,
+    "gmm_cols": " required, a list contains index of the gmm columns " ,
+    "one-hot_cols":" required, a list contains index of the one-hot columns " ,
+    "ordinal_cols":" required, a list contains index of the ordinal columns " ,
     "model": " required, select a generative model, LGAN(LSTM) or VGAN(MLP) " ,
     "n_epochs": " required, num of training epochs " ,
     "steps_per_epoch": " required, steps per epoch " ,
@@ -35,9 +35,9 @@ pip3 install -r requirements.txt
     "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
 },
 {
-    another parameters ...
+    "another parameters ..."
 },
-...]
+"..."]
 ```
 Folder "params" contains some examples, you can run the code using those parameter files directly, or write a self-defined parameter file to train a new dataset.
 
