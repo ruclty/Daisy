@@ -31,7 +31,8 @@ pip3 install -r requirements.txt
     "param": " required if rand_search is 'yes', hyper-parameter of the NN " , 
     "train_method": " required, training method " ,  
     "label": " required if train_method is a conditional training, name of the label column " , 
-    "KL":"no" " optional, whether using KL loss in training, default 'yes' " , 
+    "KL": " optional, whether using KL loss in training, default 'yes' " , 
+    "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
 },
 ```
 Folder "params" contains some examples, you can run the code using those parameter files directly, or write a self-defined parameter file to train a new dataset.
