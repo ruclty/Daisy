@@ -41,7 +41,7 @@ def KL_Loss(x_fake, x_real, col_type, col_dim):
             kl += compute_kl(real, dist)
     return kl
     
-def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, steps_per_epoch = None, GPU=False, KL=True):
+def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, steps_per_epoch = None, GPU=False, KL=True, ratio=1):
     """
     The vanilla (basic) training process for GAN
     Args:
@@ -154,7 +154,7 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                     if GPU:
                         G.cpu()
                         G.GPU = False
-                    z = torch.randn(len(sampleloader.data), z_dim)
+                    z = torch.randn(len(sampleloader.data)*ratio, z_dim)
                     x_fake = G(z)
                     samples = x_fake.cpu()
                     samples = samples.reshape(samples.shape[0], -1)
