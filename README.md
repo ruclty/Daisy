@@ -15,7 +15,7 @@ pip3 install -r requirements.txt
 ## Parameters
  You need write a .json file as the input parameters of code. The format of parameter file should be :
 ```json
-{
+[{
     "name": " required, name of the output file " ,
     "train": " required, path of the training file " ,
     "sample": " required, path of the sampling file " ,
@@ -34,6 +34,10 @@ pip3 install -r requirements.txt
     "KL": " optional, whether using KL loss in training, default 'yes' " , 
     "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
 },
+{
+    another parameters ...
+},
+...]
 ```
 Folder "params" contains some examples, you can run the code using those parameter files directly, or write a self-defined parameter file to train a new dataset.
 
