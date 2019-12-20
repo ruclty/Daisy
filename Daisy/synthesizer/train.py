@@ -154,7 +154,7 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                     if GPU:
                         G.cpu()
                         G.GPU = False
-                    z = torch.randn(len(sampleloader.data)*ratio, z_dim)
+                    z = torch.randn(int(len(sampleloader.data)*ratio), z_dim)
                     x_fake = G(z)
                     samples = x_fake.cpu()
                     samples = samples.reshape(samples.shape[0], -1)
