@@ -151,6 +151,29 @@ class VGAN_discriminator(nn.Module):
         else:
             return torch.sigmoid(z)
             
+class LSTM_discriminator(nn.Module):
+    def __init__(self, x_dim, lstm_dim, condition=False, c_dim=0):
+        super(LSTM_discriminator, self).__init__()
+        self.LSTM = nn.LSTMCell(1+c_dim, lstm_dim)
+        self.mlp = nn.Sequential(
+            nn.Linear(lstm_dim, 1),
+            nn.Sigmoid()
+        )
+        self.condition = condition
+        self.l_dim = lstm_dim
+    def forward(self, x, c=None):
+        if self.condition:
+            assert c is not None
+        hx = torch.randn(x.size(0), self.l_dim)
+        cx = torch.randn(x.size(0), self.l_dim)
+        for i in range(x.size(1)):
+            input_x = x[:,i].reshape(-1,1)
+            if self.condition:
+                input_x = torch.cat((input_x, x), dim = 1)
+            hx, cx = self.LSTM(input_x, (hx, cx))
+        return self.mlp(hx)
+        
+            
             
 class LGAN_generator(nn.Module):
     """
