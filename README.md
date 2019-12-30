@@ -24,7 +24,7 @@ pip3 install -r requirements.txt
     "one-hot_cols":" required, a list contains index of the one-hot columns " ,
     "ordinal_cols":" required, a list contains index of the ordinal columns " ,
     "model": " required, model of the generator, LGAN(LSTM) or VGAN(MLP) " ,
-    "dis_model" " optional, model of the discriminator, lstm or mlp, default mlp ",
+    "dis_model": " optional, model of the discriminator, lstm or mlp, default mlp ",
     "n_epochs": " required, num of training epochs " ,
     "steps_per_epoch": " required, steps per epoch " ,
     "n_search": " required, training times " ,
