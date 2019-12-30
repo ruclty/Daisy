@@ -166,7 +166,7 @@ class LSTM_discriminator(nn.Module):
             assert c is not None
         hx = torch.randn(x.size(0), self.l_dim)
         cx = torch.randn(x.size(0), self.l_dim)
-        if torch.cuda.is_available()
+        if torch.cuda.is_available():
             hx = hx.cuda()
             cx = cx.cuda()
         for i in range(x.size(1)):
