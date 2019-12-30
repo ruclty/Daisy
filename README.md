@@ -45,7 +45,7 @@ Folder "params" contains some examples, you can run the code using those paramet
 ## Run
 Run the code with the following command :
 ```sh
-python src/run.py [parameter file]
+python Daisy/run.py [parameter file]
 ```
 You can run the following command for quickly start :
 ```sh
