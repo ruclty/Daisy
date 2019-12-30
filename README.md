@@ -29,14 +29,14 @@ pip3 install -r requirements.txt
     "steps_per_epoch": " required, steps per epoch " ,
     "n_search": " required, training times " ,
     "rand_search": " required, whether to search hyper-parameters randomly " , 
-    "param": " required if rand_search is 'yes', hyper-parameter of the NN " , 
+    "param": " required if rand_search is 'no', hyper-parameter of the NN " , 
     "train_method": " required, training method " ,  
     "label": " required if train_method is a conditional training, name of the label column " , 
     "KL": " optional, whether using KL loss in training, default 'yes' " , 
     "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
 },
 {
-    "another parameters ..."
+    "another parameters group ..."
 },
 "..."]
 ```
