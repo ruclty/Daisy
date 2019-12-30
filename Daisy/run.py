@@ -1,7 +1,7 @@
 from data import NumericalField, CategoricalField, Iterator
 from data import Dataset
 from synthesizer import VGAN_generator, VGAN_discriminator
-from synthesizer import LGAN_generator, LGAN_discriminator
+from synthesizer import LGAN_generator, LGAN_discriminator, LSTM_discriminator
 from synthesizer import DCGAN_generator, DCGAN_discriminator
 from synthesizer import V_Train,C_Train,W_Train, C_Train_dp, C_Train_nofair
 from random import choice
@@ -20,6 +20,7 @@ VGAN_variable = {
 	"gen_num_layers":[1,2,3],
 	"dis_hidden_dim":[100,200,300,400],
 	"dis_num_layers":[1,2,3],
+	"dis_lstm_dim":[100,200,300,400],
 	"lr":[0.0001,0.0002]
 }
 
@@ -30,6 +31,7 @@ LGAN_variable = {
 	"gen_lstm_dim":[100, 200,300,400],
 	"dis_hidden_dim":[100,200,300,400],
 	"dis_num_layers":[1,2,3],
+	"dis_lstm_dim":[100,200,300,400],
 	"lr":[0.0002,0.0001]
 }
 
@@ -96,13 +98,25 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		
 	if model == "VGAN":
 		gen = VGAN_generator(param["z_dim"], param["gen_hidden_dim"], x_dim, param["gen_num_layers"], col_type, col_ind, condition=condition,c_dim=c_dim)
-		dis = VGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"],condition,c_dim)
+		if "dis_model" in config.keys():
+			if config["dis_model"] == "lstm":
+				dis = LSTM_discriminator(x_dim, param["dis_lstm_dim"], condition, c_dim)
+			elif config["dis_model"] == "mlp":
+				dis = VGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"],condition,c_dim)
+		else:
+			dis = VGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"],condition,c_dim)
 	elif model == "LGAN":
 		gen = LGAN_generator(param["z_dim"], param["gen_feature_dim"], param["gen_lstm_dim"], col_dim, col_type, condition, c_dim)
-		dis = LGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"], condition, c_dim)
-	elif model == "DCGAN":
-		gen = DCGAN_generator(param["z_dim"], train_it.shape, 2, col_type)
-		dis = DCGAN_discriminator(train_it.shape, 2)		
+		if "dis_model" in config.keys():
+			if config["dis_model"] == "lstm":
+				dis = LSTM_discriminator(x_dim, param["dis_lstm_dim"], condition, c_dim)
+			elif config["dis_model"] == "mlp":
+				dis = LGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"], condition, c_dim)
+		else:
+			dis = LGAN_discriminator(x_dim, param["dis_hidden_dim"], param["dis_num_layers"], condition, c_dim)
+	#elif model == "DCGAN":
+	#	gen = DCGAN_generator(param["z_dim"], train_it.shape, 2, col_type)
+	#	dis = DCGAN_discriminator(train_it.shape, 2)		
 		
 	print(gen)
 	print(dis)

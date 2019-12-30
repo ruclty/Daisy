@@ -133,7 +133,6 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                 if KL:
                     KL_loss = KL_Loss(x_fake, x_real, col_type, dataset.col_dim)
                     G_Loss = G_Loss1 + KL_loss
-                    print("using KL")
                 else:
                     G_Loss = G_Loss1
 
