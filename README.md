@@ -1,6 +1,7 @@
-# Daisy
+# Daisy: 	Relational Data Synthesis using Generative Adversarial Networks: A Design Space Exploration
 
-## Using Generative Adverisal Network to generate the synthetic data.
+## Technical Report of An Experimental Study
+<https://github.com/ruclty/Daisy/blob/master/daisy.pdf>
 
 
 ## Requirements
