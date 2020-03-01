@@ -50,7 +50,7 @@ Run the code with the following command :
 ```sh
 python Daisy/run.py [parameter file]
 ```
-You can run the following command for quickly start :
+or run the following command for quickly start :
 ```sh
 ./run.sh
 ```
