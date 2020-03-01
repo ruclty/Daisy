@@ -35,7 +35,8 @@ We provide four datasets, which can be found in the `dataset` folder.
     "train_method": " required, training method " ,  
     "label": " required if train_method is a conditional training, name of the label column " , 
     "KL": " optional, whether using KL loss in training, default 'yes' " , 
-    "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
+    "ratio" : " optional, the ratio of the number of sample records to the real data, default 1",
+    "sample_times" : "optional, times of sampling, default 1"
 },
 {
     "another parameters group ..."
