@@ -121,6 +121,12 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 	print(gen)
 	print(dis)
 	GPU = torch.cuda.is_available()
+
+	if "sample_times" in config.keys():
+		sample_times = config["sample_times"]
+	else:
+		sample_times = 1
+
 	if train_method == "VTrain":
 		KL = True
 		if "KL" in config.keys():
@@ -129,21 +135,21 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 			ratio = config["ratio"]
 		else:
 			ratio = 1
-		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL,ratio=ratio)
+		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL,ratio=ratio)
 	elif train_method == "CTrain":
 		print((c_dim, condition, x_dim))	
-		C_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU)
+		C_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU)
 	elif train_method == "WTrain":
 		dis.wgan = True
 		KL=True
 		if "KL" in config.keys():
 			KL = True if config["KL"] == "yes" else False
-		W_Train(search, path, sample_it, gen, dis, config["ng"], config["nd"], 0.01, param["lr"], train_it, param["z_dim"], dataset, col_type, itertimes=100, GPU=GPU,KL=KL)
+		W_Train(search, path, sample_it, gen, dis, config["ng"], config["nd"], 0.01, param["lr"], train_it, param["z_dim"], dataset, col_type,sample_times, itertimes=100, GPU=GPU,KL=KL)
 	elif train_method == "CTrain_dp":
 		dis.wgan = True
-		C_Train_dp(search, path, sample_it, gen, dis, config["ng"], config["nd"], 0.01, param["lr"], train_it, param["z_dim"], dataset, col_type, config["eps"], itertimes = 100, GPU=GPU)
+		C_Train_dp(search, path, sample_it, gen, dis, config["ng"], config["nd"], 0.01, param["lr"], train_it, param["z_dim"], dataset, col_type, config["eps"], sample_times,itertimes = 100, GPU=GPU)
 	elif train_method == "CTrain_nofair":
-		C_Train_nofair(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type,itertimes = 100, steps_per_epoch = config["steps_per_epoch"], GPU=GPU)		
+		C_Train_nofair(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type,sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"], GPU=GPU)		
 
 if __name__ == "__main__":
 	os.environ["CUDA_VISIBLE_DEVICES"] = "1"

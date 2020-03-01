@@ -41,7 +41,7 @@ def KL_Loss(x_fake, x_real, col_type, col_dim):
             kl += compute_kl(real, dist)
     return kl
     
-def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, steps_per_epoch = None, GPU=False, KL=True, ratio=1):
+def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type, sample_times, itertimes = 100, steps_per_epoch = None, GPU=False, KL=True, ratio=1):
     """
     The vanilla (basic) training process for GAN
     Args:
@@ -153,14 +153,15 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                     if GPU:
                         G.cpu()
                         G.GPU = False
-                    z = torch.randn(int(len(sampleloader.data)*ratio), z_dim)
-                    x_fake = G(z)
-                    samples = x_fake.cpu()
-                    samples = samples.reshape(samples.shape[0], -1)
-                    samples = samples[:,:dataset.dim]
-                    sample_table = dataset.reverse(samples.detach().numpy())
-                    sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
-                    sample_data.to_csv(path+'sample_data_{}_{}.csv'.format(t,epoch), index = None)
+                    for time in range(sample_times):
+                        z = torch.randn(int(len(sampleloader.data)*ratio), z_dim)
+                        x_fake = G(z)
+                        samples = x_fake.cpu()
+                        samples = samples.reshape(samples.shape[0], -1)
+                        samples = samples[:,:dataset.dim]
+                        sample_table = dataset.reverse(samples.detach().numpy())
+                        sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                        sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch,time), index = None)
                     if GPU:
                         G.cuda()
                         G.GPU = True
@@ -169,7 +170,7 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
     return G,D
 
 
-def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, GPU=False, KL=True):
+def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, dataset, col_type, sample_times, itertimes = 100, GPU=False, KL=True):
     """
     The WGAN training process for GAN
     Args:
@@ -263,14 +264,15 @@ def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, data
             if GPU:
                 G.cpu()
                 G.GPU = False
-            z = torch.randn(len(sampleloader.data), z_dim)
-            x_fake = G(z)          
-            samples = x_fake.cpu()
-            samples = samples.reshape(samples.shape[0], -1)
-            samples = samples[:,:dataset.dim]
-            sample_table = dataset.reverse(samples.detach().numpy())
-            sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
-            sample_data.to_csv(path+'sample_data_{}_{}.csv'.format(t,int(t1/epoch_time)), index = None)
+            for time in range(sample_times):
+                z = torch.randn(len(sampleloader.data), z_dim)
+                x_fake = G(z)          
+                samples = x_fake.cpu()
+                samples = samples.reshape(samples.shape[0], -1)
+                samples = samples[:,:dataset.dim]
+                sample_table = dataset.reverse(samples.detach().numpy())
+                sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,int(t1/epoch_time),time), index = None)
             if GPU:
                 G.cuda()
                 G.GPU = True
@@ -278,7 +280,7 @@ def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, data
     return G,D
 
 
-def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, steps_per_epoch = None, GPU=False):
+def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type, sample_times, itertimes = 100, steps_per_epoch = None, GPU=False):
     """
     The
     Args:
@@ -379,23 +381,24 @@ def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
         if GPU:
             G.cpu()
             G.GPU = False
-        y = torch.from_numpy(sampleloader.label).float()
-        z = torch.randn(len(sampleloader.label), z_dim)
-        x_fake = G(z, y)
-        x_fake = torch.cat((x_fake, y), dim = 1)
-        samples = x_fake.cpu()
-        samples = samples.reshape(samples.shape[0], -1)
-        samples = samples[:,:dataset.dim]
-        sample_table = dataset.reverse(samples.detach().numpy())
-        sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
-        sample_data.to_csv(path+'sample_data_{}_{}.csv'.format(t,epoch), index = None)
+        for time in range(sample_times):
+            y = torch.from_numpy(sampleloader.label).float()
+            z = torch.randn(len(sampleloader.label), z_dim)
+            x_fake = G(z, y)
+            x_fake = torch.cat((x_fake, y), dim = 1)
+            samples = x_fake.cpu()
+            samples = samples.reshape(samples.shape[0], -1)
+            samples = samples[:,:dataset.dim]
+            sample_table = dataset.reverse(samples.detach().numpy())
+            sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+            sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch,time), index = None)
         if GPU:
             G.cuda()
             G.GPU = True
         G.train()
     return G,D
 
-def C_Train_nofair(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type,itertimes = 100, steps_per_epoch = None, GPU=False):
+def C_Train_nofair(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = None, GPU=False):
     """
     The
     Args:
@@ -495,16 +498,17 @@ def C_Train_nofair(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, d
                     if GPU:
                         G.cpu()
                         G.GPU = False
-                    y = torch.from_numpy(sampleloader.label).float()
-                    z = torch.randn(len(sampleloader.label), z_dim)
-                    x_fake = G(z, y)
-                    x_fake = torch.cat((x_fake, y), dim = 1)
-                    samples = x_fake.cpu()
-                    samples = samples.reshape(samples.shape[0], -1)
-                    samples = samples[:,:dataset.dim]
-                    sample_table = dataset.reverse(samples.detach().numpy())
-                    sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
-                    sample_data.to_csv(path+'sample_data_{}_{}.csv'.format(t,epoch), index = None)
+                    for time in range(sample_times):
+                        y = torch.from_numpy(sampleloader.label).float()
+                        z = torch.randn(len(sampleloader.label), z_dim)
+                        x_fake = G(z, y)
+                        x_fake = torch.cat((x_fake, y), dim = 1)
+                        samples = x_fake.cpu()
+                        samples = samples.reshape(samples.shape[0], -1)
+                        samples = samples[:,:dataset.dim]
+                        sample_table = dataset.reverse(samples.detach().numpy())
+                        sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                        sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch, time), index = None)
                     if GPU:
                         G.cuda()
                         G.GPU = True
@@ -513,7 +517,7 @@ def C_Train_nofair(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, d
     return G,D
 
 
-def C_Train_dp(t, path, sampleloader,G, D, ng, nd, cp, lr, dataloader, z_dim, dataset, col_type, eps, itertimes = 100, GPU=False,delta=0.00001):
+def C_Train_dp(t, path, sampleloader,G, D, ng, nd, cp, lr, dataloader, z_dim, dataset, col_type, eps, sample_times, itertimes = 100, GPU=False,delta=0.00001):
     """
     The Conditional Training with Differential Privacy
     Args:
@@ -621,16 +625,17 @@ def C_Train_dp(t, path, sampleloader,G, D, ng, nd, cp, lr, dataloader, z_dim, da
             if GPU:
                 G.cpu()
                 G.GPU = False
-            y = torch.from_numpy(sampleloader.label).float()
-            z = torch.randn(len(sampleloader.label), z_dim)
-            x_fake = G(z, y)
-            x_fake = torch.cat((x_fake, y), dim = 1)
-            samples = x_fake.cpu()
-            samples = samples.reshape(samples.shape[0], -1)
-            samples = samples[:,:dataset.dim]
-            sample_table = dataset.reverse(samples.detach().numpy())
-            sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
-            sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(eps, t,int(t1/epoch_time)), index = None)
+            for time in range(sample_times):
+                y = torch.from_numpy(sampleloader.label).float()
+                z = torch.randn(len(sampleloader.label), z_dim)
+                x_fake = G(z, y)
+                x_fake = torch.cat((x_fake, y), dim = 1)
+                samples = x_fake.cpu()
+                samples = samples.reshape(samples.shape[0], -1)
+                samples = samples[:,:dataset.dim]
+                sample_table = dataset.reverse(samples.detach().numpy())
+                sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                sample_data.to_csv(path+'sample_data_{}_{}_{}_{}.csv'.format(eps, t,int(t1/epoch_time),time), index = None)
             if GPU:
                 G.cuda()
                 G.GPU = True
