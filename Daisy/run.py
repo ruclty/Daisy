@@ -76,6 +76,7 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 	else:
 		square = False
 		pad = None
+
 	train_it, sample_it = Iterator.split(
 		batch_size = param["batch_size"],
 		train = dataset,
@@ -131,11 +132,7 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		KL = True
 		if "KL" in config.keys():
 			KL = True if config["KL"] == "yes" else False
-		if "ratio" in config.keys():
-			ratio = config["ratio"]
-		else:
-			ratio = 1
-		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL,ratio=ratio)
+		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL)
 	elif train_method == "CTrain":
 		print((c_dim, condition, x_dim))	
 		C_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU)
@@ -173,6 +170,12 @@ if __name__ == "__main__":
 		train = pd.read_csv(config["train"])
 		fields = []
 		col_type = []
+
+		if "ratio" in config.keys():
+			ratio = config["ratio"]
+		else:
+			ratio = 1
+
 		if "label" in config.keys():
 			cond = config["label"]
 		for i, col in enumerate(list(train)):
@@ -194,12 +197,14 @@ if __name__ == "__main__":
 			else:
 				fields.append((col, CategoricalField("binary",noise=0)))
 				col_type.append("binary")
+
 		trn, samp = Dataset.split(
 			fields = fields,
 			path = ".",
 			train = config["train"],
 			validation = config["sample"],
-			format = "csv"
+			format = "csv",
+			valid_ratio=ratio
 		)
 		trn.learn_convert()
 		samp.learn_convert()

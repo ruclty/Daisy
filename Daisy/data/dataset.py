@@ -9,11 +9,14 @@ class Dataset:
 				fields,
 				path, 
 				ignore_columns=None,
-				format='csv'):
+				format='csv',
+				ratio=1):
 				
 		self.fields = fields
 		if format == "csv":
 			self.raw_file = pd.read_csv(path)
+			if ratio != 1:
+				self.raw_file = self.raw_file.sample(frac=ratio, replace=False)
 			self.columns = list(self.raw_file)
 			if ignore_columns is not None:
 				self.columns = list(filter(lambda x: x not in ignore_columns, self.columns))
@@ -25,7 +28,7 @@ class Dataset:
 		for idx in range(len(self.raw_file)):
 			values = []
 			for col in self.columns:
-				values.append(self.raw_file[col][idx])	
+				values.append(self.raw_file.iloc[idx][col])	
 			self.Rows.append(Row(values, idx, self.columns))	
 		#Read data by column
 		self.dim = 0
@@ -69,15 +72,18 @@ class Dataset:
               validation = None,
               ignore_columns = None,
               format='csv',
-              test = None):
+              test = None,
+              train_ratio=1,
+              test_ratio=1,
+              valid_ratio=1):
 			
 		dataset_args = {'fields': fields, 'ignore_columns': ignore_columns, 'format': format}
 		train_data = None if train is None else cls(
-			path = os.path.join(path, train), **dataset_args)
+			path = os.path.join(path, train), **dataset_args, ratio=train_ratio)
 		valid_data = None if validation is None else cls(
-			path = os.path.join(path, validation), **dataset_args)
+			path = os.path.join(path, validation), **dataset_args, ratio=valid_ratio)
 		test_data = None if test is None else cls(
-			path = os.path.join(path, test), **dataset_args)
+			path = os.path.join(path, test), **dataset_args, ratio=test_ratio)
 		datasets = tuple(
 			d for d in (train_data, valid_data, test_data) if d is not None)
 			
