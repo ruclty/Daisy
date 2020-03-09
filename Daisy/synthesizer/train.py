@@ -150,22 +150,30 @@ def V_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                     print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
                 if it >= steps_per_epoch:
                     G.eval()
-                    if GPU:
-                        G.cpu()
-                        G.GPU = False
+                    #if GPU:
+                    #    G.cpu()
+                    #    G.GPU = False
                     for time in range(sample_times):
-                        all_num = int(len(sampleloader.data))
-                        z = torch.randn(int(len(sampleloader.data)), z_dim)
-                        x_fake = G(z)
-                        samples = x_fake.cpu()
-                        samples = samples.reshape(samples.shape[0], -1)
-                        samples = samples[:,:dataset.dim]
-                        sample_table = dataset.reverse(samples.detach().numpy())
-                        sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                        sample_data = None
+                        for x_real in sampleloader:
+                            z = torch.randn(x_real.shape[0], z_dim)
+                            if GPU:
+                                z = z.cuda()
+                            x_fake = G(z)
+                            samples = x_fake
+                            samples = samples.reshape(samples.shape[0], -1)
+                            samples = samples[:,:dataset.dim]
+                            samples = samples.cpu()
+                            sample_table = dataset.reverse(samples.detach().numpy())
+                            df = pd.DataFrame(sample_table,columns=dataset.columns)
+                            if sample_data is None:
+                                sample_data = df
+                            else:
+                                sample_data = sample_data.append(df)
                         sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch,time), index = None)
-                    if GPU:
-                        G.cuda()
-                        G.GPU = True
+                   # if GPU:
+                   #     G.cuda()
+                    #    G.GPU = True
                     G.train()
                     break
     return G,D
@@ -262,21 +270,30 @@ def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, data
             log.close()  
         if t1 % epoch_time == 0 and t1 > 0:
             G.eval()
-            if GPU:
-                G.cpu()
-                G.GPU = False
+           # if GPU:
+            #    G.cpu()
+            #    G.GPU = False
             for time in range(sample_times):
-                z = torch.randn(len(sampleloader.data), z_dim)
-                x_fake = G(z)          
-                samples = x_fake.cpu()
-                samples = samples.reshape(samples.shape[0], -1)
-                samples = samples[:,:dataset.dim]
-                sample_table = dataset.reverse(samples.detach().numpy())
-                sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                sample_data = None
+                for x_real in sampleloader:
+                    z = torch.randn(x_real.shape[0], z_dim)
+                    if GPU:
+                        z = z.cuda()
+                    x_fake = G(z)
+                    samples = x_fake
+                    samples = samples.reshape(samples.shape[0], -1)
+                    samples = samples[:,:dataset.dim]
+                    samples = samples.cpu()
+                    sample_table = dataset.reverse(samples.detach().numpy())
+                    df = pd.DataFrame(sample_table,columns=dataset.columns)
+                    if sample_data is None:
+                        sample_data = df
+                    else:
+                        sample_data = sample_data.append(df)
                 sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,int(t1/epoch_time),time), index = None)
-            if GPU:
-                G.cuda()
-                G.GPU = True
+            #if GPU:
+            #    G.cuda()
+            #    G.GPU = True
             G.train()
     return G,D
 
@@ -379,23 +396,32 @@ def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
                 print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
 
         G.eval()
-        if GPU:
-            G.cpu()
-            G.GPU = False
+        #if GPU:
+        #    G.cpu()
+        #    G.GPU = False
         for time in range(sample_times):
-            y = torch.from_numpy(sampleloader.label).float()
-            z = torch.randn(len(sampleloader.label), z_dim)
-            x_fake = G(z, y)
-            x_fake = torch.cat((x_fake, y), dim = 1)
-            samples = x_fake.cpu()
-            samples = samples.reshape(samples.shape[0], -1)
-            samples = samples[:,:dataset.dim]
-            sample_table = dataset.reverse(samples.detach().numpy())
-            sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+            sample_data = None
+            for x, y in sampleloader:
+                z = torch.randn(x.shape[0], z_dim)
+                if GPU:
+                    z = z.cuda()
+                    y = y.cuda()
+                x_fake = G(z, y)
+                x_fake = torch.cat((x_fake, y), dim = 1)
+                samples = x_fake
+                samples = samples.reshape(samples.shape[0], -1)
+                samples = samples[:,:dataset.dim]
+                samples = samples.cpu()
+                sample_table = dataset.reverse(samples.detach().numpy())
+                df = pd.DataFrame(sample_table,columns=dataset.columns)
+                if sample_data is None:
+                    sample_data = df
+                else:
+                    sample_data = sample_data.append(df)
             sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch,time), index = None)
-        if GPU:
-            G.cuda()
-            G.GPU = True
+        #if GPU:
+        #    G.cuda()
+        #    G.GPU = True
         G.train()
     return G,D
 
@@ -496,23 +522,32 @@ def C_Train_nofair(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, d
                     
                 if it >= steps_per_epoch:
                     G.eval()
-                    if GPU:
-                        G.cpu()
-                        G.GPU = False
+                    #if GPU:
+                    #    G.cpu()
+                    #    G.GPU = False
                     for time in range(sample_times):
-                        y = torch.from_numpy(sampleloader.label).float()
-                        z = torch.randn(len(sampleloader.label), z_dim)
-                        x_fake = G(z, y)
-                        x_fake = torch.cat((x_fake, y), dim = 1)
-                        samples = x_fake.cpu()
-                        samples = samples.reshape(samples.shape[0], -1)
-                        samples = samples[:,:dataset.dim]
-                        sample_table = dataset.reverse(samples.detach().numpy())
-                        sample_data = pd.DataFrame(sample_table,columns=dataset.columns)
+                        sample_data = None
+                        for x, y in sampleloader:
+                            z = torch.randn(x.shape[0], z_dim)
+                            if GPU:
+                                z = z.cuda()
+                                y = y.cuda()
+                            x_fake = G(z, y)
+                            x_fake = torch.cat((x_fake, y), dim = 1)
+                            samples = x_fake
+                            samples = samples.reshape(samples.shape[0], -1)
+                            samples = samples[:,:dataset.dim]
+                            samples = samples.cpu()
+                            sample_table = dataset.reverse(samples.detach().numpy())
+                            df = pd.DataFrame(sample_table,columns=dataset.columns)
+                            if sample_data is None:
+                                sample_data = df
+                            else:
+                                sample_data = sample_data.append(df)
                         sample_data.to_csv(path+'sample_data_{}_{}_{}.csv'.format(t,epoch, time), index = None)
-                    if GPU:
-                        G.cuda()
-                        G.GPU = True
+                    #if GPU:
+                    #    G.cuda()
+                    #    G.GPU = True
                     G.train()
                     break
     return G,D
