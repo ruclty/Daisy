@@ -77,6 +77,9 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		square = False
 		pad = None
 
+	print(dataset.col_ind)
+	print(sampleset.col_ind)
+	print(labels)
 	train_it, sample_it = Iterator.split(
 		batch_size = param["batch_size"],
 		train = dataset,
@@ -129,12 +132,14 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		sample_times = 1
 
 	if train_method == "VTrain":
+		print((c_dim, condition, x_dim))
 		KL = True
 		if "KL" in config.keys():
 			KL = True if config["KL"] == "yes" else False
 		V_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU,KL=KL)
 	elif train_method == "CTrain":
-		print((c_dim, condition, x_dim))	
+		print((c_dim, condition, x_dim))
+		print(train_it.label.shape)	
 		C_Train(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type, sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"],GPU=GPU)
 	elif train_method == "WTrain":
 		dis.wgan = True
@@ -179,7 +184,7 @@ if __name__ == "__main__":
 		if "label" in config.keys():
 			cond = config["label"]
 		for i, col in enumerate(list(train)):
-			if "label" in config.keys() and col == cond:
+			if "label" in config.keys() and col in cond:
 				fields.append((col, CategoricalField("one-hot", noise=0)))
 				col_type.append("condition")
 			elif i in config["normalize_cols"]:
@@ -212,7 +217,7 @@ if __name__ == "__main__":
 		print("train row : {}".format(len(trn)))
 		print("sample row: {}".format(len(samp)))
 		n_search = config["n_search"]
-		
+		print(col_type)
 		jobs = [multiprocessing.Process(target=thread_run, args=(path, search, config, col_type, trn, samp)) for search in range(n_search)]	
 		for j in jobs:
 			j.start()
