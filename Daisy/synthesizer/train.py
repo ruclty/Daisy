@@ -389,11 +389,11 @@ def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
             G_Loss.backward()
             G_optim.step()
 
-        if it%itertimes == 0:
-            log = open(path+"train_log_"+str(t)+".txt","a+")
-            log.write("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
-            log.close()
-            print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
+            if it%itertimes == 0:
+                log = open(path+"train_log_"+str(t)+".txt","a+")
+                log.write("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
+                log.close()
+                print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
 
         G.eval()
         #if GPU:
