@@ -337,63 +337,63 @@ def C_Train(t, path, sampleloader, G, D, epochs, lr, dataloader, z_dim, dataset,
         log.close()
         print("-----------Epoch {}-----------".format(epoch))
         for it in range(steps_per_epoch):
-            for c in conditions:
-                x_real, c_real = dataloader.sample(label=list(c))
-                if GPU:
-                    x_real = x_real.cuda()
-                    c_real = c_real.cuda()
-                ''' train Discriminator '''
-                z = torch.randn(x_real.shape[0], z_dim)
-                if GPU:
-                    z = z.cuda()
-                    
-                x_fake = G(z, c_real)
-                y_real = D(x_real, c_real)
-                y_fake = D(x_fake, c_real)
+            c = random.choice(conditions)
+            x_real, c_real = dataloader.sample(label=list(c))
+            if GPU:
+                x_real = x_real.cuda()
+                c_real = c_real.cuda()
+            ''' train Discriminator '''
+            z = torch.randn(x_real.shape[0], z_dim)
+            if GPU:
+                z = z.cuda()
                 
-                #D_Loss = -(torch.mean(y_real) - torch.mean(y_fake)) # wgan loss
-                fake_label = torch.zeros(y_fake.shape[0], 1)
-                real_label = np.ones([y_real.shape[0], 1])
-                real_label = real_label * 0.7 + np.random.uniform(0, 0.3, real_label.shape)
-                real_label = torch.from_numpy(real_label).float()
-                if GPU:
-                    fake_label = fake_label.cuda()
-                    real_label = real_label.cuda()
+            x_fake = G(z, c_real)
+            y_real = D(x_real, c_real)
+            y_fake = D(x_fake, c_real)
+            
+            #D_Loss = -(torch.mean(y_real) - torch.mean(y_fake)) # wgan loss
+            fake_label = torch.zeros(y_fake.shape[0], 1)
+            real_label = np.ones([y_real.shape[0], 1])
+            real_label = real_label * 0.7 + np.random.uniform(0, 0.3, real_label.shape)
+            real_label = torch.from_numpy(real_label).float()
+            if GPU:
+                fake_label = fake_label.cuda()
+                real_label = real_label.cuda()
+            
+            D_Loss1 = F.binary_cross_entropy(y_real, real_label)
+            D_Loss2 = F.binary_cross_entropy(y_fake, fake_label)
+            D_Loss = D_Loss1 + D_Loss2
+            
+            G_optim.zero_grad()
+            D_optim.zero_grad()
+            D_Loss.backward()
+            D_optim.step()
+            ''' train Generator '''
+            z = torch.randn(x_real.shape[0], z_dim)
+            if GPU:
+                z = z.cuda()
                 
-                D_Loss1 = F.binary_cross_entropy(y_real, real_label)
-                D_Loss2 = F.binary_cross_entropy(y_fake, fake_label)
-                D_Loss = D_Loss1 + D_Loss2
+            x_fake = G(z, c_real)
+            y_fake = D(x_fake, c_real)
+            
+            real_label = torch.ones(y_fake.shape[0], 1)
+            if GPU:
+                real_label = real_label.cuda()
                 
-                G_optim.zero_grad()
-                D_optim.zero_grad()
-                D_Loss.backward()
-                D_optim.step()
-                ''' train Generator '''
-                z = torch.randn(x_real.shape[0], z_dim)
-                if GPU:
-                    z = z.cuda()
-                    
-                x_fake = G(z, c_real)
-                y_fake = D(x_fake, c_real)
-                
-                real_label = torch.ones(y_fake.shape[0], 1)
-                if GPU:
-                    real_label = real_label.cuda()
-                    
-                G_Loss1 = F.binary_cross_entropy(y_fake, real_label)
-                KL_loss = KL_Loss(x_fake, x_real, col_type, dataset.col_dim)
-                G_Loss = G_Loss1 + KL_loss
+            G_Loss1 = F.binary_cross_entropy(y_fake, real_label)
+            KL_loss = KL_Loss(x_fake, x_real, col_type, dataset.col_dim)
+            G_Loss = G_Loss1 + KL_loss
 
-                G_optim.zero_grad()
-                D_optim.zero_grad()
-                G_Loss.backward()
-                G_optim.step()
+            G_optim.zero_grad()
+            D_optim.zero_grad()
+            G_Loss.backward()
+            G_optim.step()
 
-            if it%itertimes == 0:
-                log = open(path+"train_log_"+str(t)+".txt","a+")
-                log.write("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
-                log.close()
-                print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
+        if it%itertimes == 0:
+            log = open(path+"train_log_"+str(t)+".txt","a+")
+            log.write("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
+            log.close()
+            print("iterator {}, D_Loss:{}, G_Loss:{}\n".format(it,D_Loss.data, G_Loss.data))
 
         G.eval()
         #if GPU:
