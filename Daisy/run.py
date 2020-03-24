@@ -21,7 +21,8 @@ VGAN_variable = {
 	"dis_hidden_dim":[100,200,300,400],
 	"dis_num_layers":[1,2,3],
 	"dis_lstm_dim":[100,200,300,400],
-	"lr":[0.0001,0.0002,0.001,0.0005]
+	"lr":[0.0001,0.0002,0.001,0.0005],
+	"noise":[0.05,0.1,0.2,0.3]
 }
 
 LGAN_variable = {
@@ -184,8 +185,7 @@ if __name__ == "__main__":
 
 		if "label" in config.keys():
 			cond = config["label"]
-
-		noise = choice(LGAN_variable["noise"])
+		noise = choice([0.05,0.1,0.2,0.3])
 		for i, col in enumerate(list(train)):
 			if "label" in config.keys() and col in cond:
 				fields.append((col, CategoricalField("one-hot", noise=0)))
