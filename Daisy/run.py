@@ -21,18 +21,19 @@ VGAN_variable = {
 	"dis_hidden_dim":[100,200,300,400],
 	"dis_num_layers":[1,2,3],
 	"dis_lstm_dim":[100,200,300,400],
-	"lr":[0.0001,0.0002]
+	"lr":[0.0001,0.0002,0.001,0.0005]
 }
 
 LGAN_variable = {
-	"batch_size":[128,256,512],
-	"z_dim":[128,256],
-	"gen_feature_dim":[100, 200, 300, 400, 500],
-	"gen_lstm_dim":[100, 200,300,400],
-	"dis_hidden_dim":[100,200,300,400],
-	"dis_num_layers":[1,2,3],
+	"batch_size":[50,100,200],
+	"z_dim":[50,100,200,400],
+	"gen_feature_dim":[100, 200, 300, 400, 500,600],
+	"gen_lstm_dim":[100, 200,300,400,500,600],
+	"dis_hidden_dim":[100,200,300,400,500],
+	"dis_num_layers":[1,2,3,4,5],
 	"dis_lstm_dim":[100,200,300,400],
-	"lr":[0.0002,0.0001]
+	"lr":[0.0002,0.0001,0.0005,0.001],
+	"noise":[0.05,0.1,0.2,0.3]
 }
 
 DCGAN_variable = {
@@ -77,9 +78,9 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		square = False
 		pad = None
 
-	print(dataset.col_ind)
-	print(sampleset.col_ind)
-	print(labels)
+	#print(dataset.col_ind)
+	#print(sampleset.col_ind)
+	#print(labels)
 	train_it, sample_it = Iterator.split(
 		batch_size = param["batch_size"],
 		train = dataset,
@@ -154,7 +155,7 @@ def thread_run(path, search, config, col_type, dataset, sampleset):
 		C_Train_nofair(search, path, sample_it, gen, dis, config["n_epochs"], param["lr"], train_it, param["z_dim"], dataset, col_type,sample_times,itertimes = 100, steps_per_epoch = config["steps_per_epoch"], GPU=GPU)		
 
 if __name__ == "__main__":
-	os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+	os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 	parser = argparse.ArgumentParser()
 	parser.add_argument('configs', help='a json config file')
 	args = parser.parse_args()
@@ -183,6 +184,8 @@ if __name__ == "__main__":
 
 		if "label" in config.keys():
 			cond = config["label"]
+
+		noise = choice(LGAN_variable["noise"])
 		for i, col in enumerate(list(train)):
 			if "label" in config.keys() and col in cond:
 				fields.append((col, CategoricalField("one-hot", noise=0)))
@@ -194,13 +197,13 @@ if __name__ == "__main__":
 				fields.append((col, NumericalField("gmm", n=5)))
 				col_type.append("gmm")
 			elif i in config["one-hot_cols"]:
-				fields.append((col, CategoricalField("one-hot", noise=0)))
+				fields.append((col, CategoricalField("one-hot", noise=noise)))
 				col_type.append("one-hot")
 			elif i in config["ordinal_cols"]:
 				fields.append((col, CategoricalField("dict")))
 				col_type.append("ordinal")
 			else:
-				fields.append((col, CategoricalField("binary",noise=0)))
+				fields.append((col, CategoricalField("binary",noise=noise)))
 				col_type.append("binary")
 
 		trn, samp = Dataset.split(
@@ -217,7 +220,6 @@ if __name__ == "__main__":
 		print("train row : {}".format(len(trn)))
 		print("sample row: {}".format(len(samp)))
 		n_search = config["n_search"]
-		print(col_type)
 		jobs = [multiprocessing.Process(target=thread_run, args=(path, search, config, col_type, trn, samp)) for search in range(n_search)]	
 		for j in jobs:
 			j.start()
