@@ -39,7 +39,10 @@ class Dataset:
 			if col not in self.columns:
 				continue
 			assert field is None or isinstance(field, (NumericalField, CategoricalField))
-			values = self.raw_file[col].values.reshape(-1, 1)
+			if isinstance(field, CategoricalField):
+				values = self.raw_file[col].astype(str).values.reshape(-1,1)
+			else:
+				values = self.raw_file[col].values.reshape(-1, 1)
 			Field = field
 			self.__setattr__(col, Column(values, name=col, field=Field) )
 			self.col_type[col] = "numerical" if isinstance(Field, NumericalField) else "categorical"
