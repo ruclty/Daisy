@@ -214,7 +214,7 @@ def W_Train(t, path, sampleloader, G, D, ng, nd, cp, lr, dataloader, z_dim, data
     D_optim = optim.RMSprop(D.parameters(), lr=lr, weight_decay=0.00001)
     G_optim = optim.RMSprop(G.parameters(), lr=lr, weight_decay=0.00001)
         
-    epoch_time = int(ng/10)
+    epoch_time = int(ng/100)
     # the default # of steps is the # of batches.
 
     for t1 in range(ng):
