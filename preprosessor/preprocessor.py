@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import random
+from pandas.api.types import is_string_dtype
 
 
 def label_unlabel_split(data, fraction):
@@ -39,6 +40,7 @@ def MCAR(data, preplace, pmissing, label_column):
     count_missing = int(pmissing * len(data))
     count_all = int(count_missing + count_replace)
 
+    noise_data = data.copy()
     for column in data.columns:
         # label_column不做处理
         if column == label_column:
@@ -46,12 +48,11 @@ def MCAR(data, preplace, pmissing, label_column):
 
         # 生成需要被清除或替换的样本索引号
         length = list(range(len(data)))
-        index_all = random.choices(length, k=count_all)
+        index_all = random.sample(length, k=count_all)
         index_replace = index_all[:count_replace]
         index_missing = index_all[count_replace:]
 
         # 将对应样本的column属性清除
-        noise_data = data.copy()
         for i in index_missing:
             noise_data.loc[i, column] = np.nan
 
@@ -61,5 +62,19 @@ def MCAR(data, preplace, pmissing, label_column):
 
     # 返回原数据和添加噪音后的数据，格式均为DataFrame
     return data, noise_data
+
+
+def certain_na_drop(data, string):
+    #  data是需要添加噪音的含label的数据，格式为DataFrame
+    #  string是在该data中代表空值的符号的正则表达式
+    #  如census数据集中含有“？”的为空值，则此处string为'\?'
+
+    clean_data = data.copy()
+    for column in data.columns:
+        if is_string_dtype(data[column]):  # 如果不是string的列，str方法会报错
+            clean_data = clean_data[~(clean_data[column].str.contains(string))]
+
+    # 返回原数据和去除含空值样本后的数据，格式均为DataFrame
+    return data, clean_data
 
 
