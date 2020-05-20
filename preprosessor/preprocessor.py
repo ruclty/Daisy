@@ -53,10 +53,13 @@ def MCAR(data, preplace, pmissing, label_column):
         index_missing = index_all[count_replace:]
 
         # 将对应样本的column属性清除
+        print("column ", column, " is under the process of missing...")
         for i in index_missing:
             noise_data.loc[i, column] = np.nan
 
+
         # 将对应样本的column属性替换
+        print("column ", column, " is under the process of replacing...")
         for i in index_replace:
             noise_data.loc[i, column] = random.choice(list(data[column]))
 
@@ -65,7 +68,7 @@ def MCAR(data, preplace, pmissing, label_column):
 
 
 def certain_na_drop(data, string):
-    #  data是需要添加噪音的含label的数据，格式为DataFrame
+    #  data是需要清洗的含label的数据，格式为DataFrame
     #  string是在该data中代表空值的符号的正则表达式
     #  如census数据集中含有“？”的为空值，则此处string为'\?'
 
