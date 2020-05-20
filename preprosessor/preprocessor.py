@@ -35,9 +35,9 @@ def MCAR(data, preplace, pmissing, label_column):
         raise ValueError("Please input one column name of label correctly.")
 
     # 计算需要被清除或替换的样本数
-    count_replace = preplace * len(data)
-    count_missing = pmissing * len(data)
-    count_all = count_missing + count_replace
+    count_replace = int(preplace * len(data))
+    count_missing = int(pmissing * len(data))
+    count_all = int(count_missing + count_replace)
 
     for column in data.columns:
         # label_column不做处理
@@ -45,7 +45,7 @@ def MCAR(data, preplace, pmissing, label_column):
             continue
 
         # 生成需要被清除或替换的样本索引号
-        length = range(len(data))
+        length = list(range(len(data)))
         index_all = random.choices(length, k=count_all)
         index_replace = index_all[:count_replace]
         index_missing = index_all[count_replace:]
@@ -57,7 +57,7 @@ def MCAR(data, preplace, pmissing, label_column):
 
         # 将对应样本的column属性替换
         for i in index_replace:
-            noise_data.loc[i, column] = random.choice(data[column])
+            noise_data.loc[i, column] = random.choice(list(data[column]))
 
     # 返回原数据和添加噪音后的数据，格式均为DataFrame
     return data, noise_data
