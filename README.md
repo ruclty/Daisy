@@ -1,6 +1,7 @@
-# Daisy: 	Relational Data Synthesis using Generative Adversarial Networks: A Design Space Exploration
+# Daisy: Relational Data Synthesis using Generative Adversarial Networks
 
-## Technical Report of An Experimental Study
+## Technical Report: Relational Data Synthesis using Generative Adversarial Networks: A Design Space Exploration
+
 <https://github.com/ruclty/Daisy/blob/master/daisy.pdf>
 
 
@@ -11,7 +12,7 @@ Then install necessary packages by :
 pip3 install -r requirements.txt
 ```
 ## Datasets
-
+We provide four datasets, which can be found in the `dataset` folder.
 
 ## Parameters
  You need write a .json file as the input parameters of code. The format of parameter file should be :
@@ -34,7 +35,8 @@ pip3 install -r requirements.txt
     "train_method": " required, training method " ,  
     "label": " required if train_method is a conditional training, name of the label column " , 
     "KL": " optional, whether using KL loss in training, default 'yes' " , 
-    "ratio" : " optional, the ratio of the number of sample records to the real data, default 1"
+    "ratio" : " optional, the ratio of the number of sample records to the real data, default 1",
+    "sample_times" : "optional, times of sampling, default 1"
 },
 {
     "another parameters group ..."
@@ -48,7 +50,7 @@ Run the code with the following command :
 ```sh
 python Daisy/run.py [parameter file]
 ```
-You can run the following command for quickly start :
+or run the following command for quickly start :
 ```sh
 ./run.sh
 ```
