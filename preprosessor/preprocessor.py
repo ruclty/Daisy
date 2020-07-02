@@ -59,8 +59,7 @@ def MCAR(data, preplace, pmissing, label_column):
 
         # 将对应样本的column属性替换
         print("column ", column, " is under the process of replacing...")
-        for i in index_replace:
-            noise_data.loc[i, column] = random.choice(list(data[column]))
+        noise_data.loc[index_replace, column] = np.random.choice(list(data[column]), count_replace)
 
     # 返回原数据和添加噪音后的数据，格式均为DataFrame
     return data, noise_data
