@@ -23,13 +23,13 @@ def label_unlabel_split(data, fraction):
 
 def MCAR(data, preplace, pmissing, label_column):
     #  data是需要添加噪音的含label的数据，格式为DataFrame
-    #  pnoise是每个属性被替换的概率，值域[0, 1]
+    #  preplace是每个属性被替换的概率，值域[0, 1]
     #  pmissing是每个属性被清除的概率，值域[0, 1]
     #  label_column是数据中为label的列名，应当在已有列之中
     if not isinstance(data, pd.DataFrame):
         raise ValueError("Please input the data in type of DataFrame.")
     if preplace < 0 or preplace > 1 or not isinstance(preplace, float):
-        raise ValueError("Please input a possibility between 0 and 1 for pnoise.")
+        raise ValueError("Please input a possibility between 0 and 1 for preplace.")
     if pmissing < 0 or pmissing > 1 or not isinstance(pmissing, float):
         raise ValueError("Please input a possibility between 0 and 1 for pmissing.")
     if label_column not in data.columns:
@@ -54,14 +54,12 @@ def MCAR(data, preplace, pmissing, label_column):
 
         # 将对应样本的column属性清除
         print("column ", column, " is under the process of missing...")
-        for i in index_missing:
-            noise_data.loc[i, column] = np.nan
+        noise_data.loc[index_missing, column] = np.nan
 
 
         # 将对应样本的column属性替换
         print("column ", column, " is under the process of replacing...")
-        for i in index_replace:
-            noise_data.loc[i, column] = random.choice(list(data[column]))
+        noise_data.loc[index_replace, column] = np.random.choice(list(data[column]), count_replace)
 
     # 返回原数据和添加噪音后的数据，格式均为DataFrame
     return data, noise_data
