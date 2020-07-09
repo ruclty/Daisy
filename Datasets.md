@@ -108,7 +108,8 @@ You can download the dataset by "Download" links. The "Detail" links point to th
 </table>
 
 **Notes:** 
-- For the efficiency of evaluation, we randomly sample 116,204 records and 142,522 records from Covtype and Census Datasets respectively in our experiments  
+- We remove the records which contain null values from Adult dataset, so the number of remaining records is 41,292.
+- For the efficiency of evaluation, we randomly sample 116,204 records and 142,522 records from Covtype and Census datasets respectively in our experiments  
 
 # Dataset Details
 
