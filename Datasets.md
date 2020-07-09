@@ -56,7 +56,7 @@ You can download the dataset by "Download" links. The "Detail" links point to th
       <td>8</td>
       <td>2</td>
       <td>skew</td>
-      <td><a href=". https://archive.ics.uci.edu/ml/datasets/Adult">Download</a> | 
+      <td><a href="https://archive.ics.uci.edu/ml/datasets/Adult">Download</a> | 
       <a href="#adult">Detail</a></td>
     </tr>
     <tr>
@@ -67,7 +67,7 @@ You can download the dataset by "Download" links. The "Detail" links point to th
       <td>2</td>
       <td>7</td>
       <td>skew</td>
-      <td><a href=". http://archive.ics.uci.edu/ml/datasets/covertype">Download</a> | 
+      <td><a href="http://archive.ics.uci.edu/ml/datasets/covertype">Download</a> | 
       <a href="#covtype">Detail</a></td>
     </tr>
     <tr>
