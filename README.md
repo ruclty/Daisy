@@ -12,7 +12,7 @@ Then install necessary packages by :
 pip3 install -r requirements.txt
 ```
 ## Datasets
-We provide four datasets, which can be found in the `dataset` folder.
+All public datasets we used in our work can be downloaded from the [datasets page].
 
 ## Parameters
  You need write a .json file as the input parameters of code. The format of parameter file should be :
