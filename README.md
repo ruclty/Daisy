@@ -36,6 +36,7 @@ You need to write a .json file as the configuration. The keyworks should include
 - KL: optional, whether using KL loss in training, default 'yes' 
 - ratio: optional, the ratio of the number of sample records to the real data, default 1
 - sample_times: optional, times of sampling, default 1
+
 Folder "params" contains some examples, you can run the code using those parameter files directly, or write a self-defined parameter file to train a new dataset.
 
 ## Run
