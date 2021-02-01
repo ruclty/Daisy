@@ -9,7 +9,7 @@
 Before running the code, please make sure your Python version is above **3.6**.
 Then install necessary packages by :
 ```sh
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 ## Datasets
 All public datasets we used in our work can be downloaded from the [datasets page](https://github.com/ruclty/Daisy/blob/master/Datasets.md).
