@@ -11,6 +11,7 @@ import torch
 import argparse
 import json
 import os
+import random
 from model_new import vaetrain
 from model_new import VAE
 from field import CategoricalField, NumericalField
@@ -32,11 +33,6 @@ if __name__ == "__main__":
         os.mkdir("expdir/"+param["name"])
     except:
         pass
-    encoder_dim = param["encoder_dim"]
-    encoder_out_dim = param["encoder_out_dim"]
-    decoder_dim = param["decoder_dim"]
-    latent_dim = param["latent_dim"]
-    sample_rows = param["sample_rows"]
     lr = param["lr"]
     header = param["header"]
     epochs = param["epochs"]
@@ -45,6 +41,11 @@ if __name__ == "__main__":
         data = pd.read_csv(param["train"])
     else:
         data = pd.read_csv(param["train"], header=None)
+    encoder_dim = random.choice([500,400,300,200,100])
+    encoder_out_dim = random.choice([500,400,300,200,100])
+    decoder_dim = random.choice([500,400,300,200,100])
+    latent_dim = random.choice([16,32,64,128])
+    sample_rows = len(data)
     data.columns = [x for x in range(data.shape[1])]
     cuda = not param["no_cuda"] and torch.cuda.is_available()
     model_name = param['model_name']

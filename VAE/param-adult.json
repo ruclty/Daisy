@@ -1,0 +1,11 @@
+{	"name":"adult",
+	"train":"../dataset/adult_train.csv",
+	"batch_size":200,
+	"continuous_cols":[0,2,4,10,11,12],
+	"lr":0.001,
+	"epochs":2,
+	"steps_per_epoch":50,
+	"no_cuda":0,
+	"model_name":"meanstd",
+	"header":1
+}
